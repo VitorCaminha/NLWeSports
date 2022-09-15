@@ -8,7 +8,8 @@ module.exports = {
       colors: {
       },
       fontFamily: {
-        'sans': ['Inter', ...defaultTheme.fontFamily.sans]
+        'sans': ['Inter', ...defaultTheme.fontFamily.sans],
+        'roboto': ['Roboto', ...defaultTheme.fontFamily.sans]
       },
       backgroundImage: {
         galaxy: "url('/background-galaxy.png')",
