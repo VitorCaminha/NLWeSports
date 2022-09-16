@@ -9,6 +9,7 @@ import { GameParams } from '../../@types/navigation';
 import { Background } from '../../components/Background';
 import { Heading } from '../../components/Heading';
 import { AdCard, AdCardProps } from '../../components/AdCard';
+import { AdModal } from '../../components/AdModal';
 
 import logoImg from '../../assets/logo-nlw-esports.png';
 
@@ -17,6 +18,7 @@ import { styles } from './styles';
 
 export function Game() {
   const [ads, setAds] = useState<AdCardProps[]>([]);
+  const [adDiscord, setAdDiscord] = useState('');
 
   const route = useRoute();
   const game = route.params as GameParams;
@@ -32,6 +34,12 @@ export function Game() {
       .then(response => response.json())
       .then(data => setAds(data));
   }, [game.id]);
+
+  async function getAdDiscord(adId: string) {
+    fetch(`http://192.168.0.10:3333/ads/${adId}/discord`)
+      .then(response => response.json())
+      .then(data => setAdDiscord(data.discord))
+  }
 
   return (
     <Background>
@@ -57,7 +65,7 @@ export function Game() {
           data={ads}
           keyExtractor={item => item.id}
           renderItem={({ item: ad }) => (
-            <AdCard data={ad} onConnect={() => {}} />
+            <AdCard data={ad} onConnect={() => getAdDiscord(ad.id)} />
           )}
           horizontal
           style={styles.list}
@@ -68,6 +76,12 @@ export function Game() {
               Não há anúncios publicados ainda!
             </Text>
           )}
+        />
+
+        <AdModal
+          visible={!!adDiscord}
+          onClose={() => setAdDiscord('')}
+          discord={adDiscord}
         />
       </SafeAreaView>
     </Background>
